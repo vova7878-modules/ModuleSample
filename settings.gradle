@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ModuleSample"
-include ':module'
+include ':module_java_only'
+include ':module_with_jni'

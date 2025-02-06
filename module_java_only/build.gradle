@@ -1,0 +1,79 @@
+import com.v7878.zygisk.gradle.ZygoteLoader
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.java.zygisk)
+}
+
+android {
+    namespace 'com.v7878.zygisk.sample'
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+
+    flavorDimensions += ["target"]
+    productFlavors {
+        applications {
+            dimension "target"
+
+            zygisk {
+                packages(ZygoteLoader.ALL_PACKAGES)
+            }
+
+            buildConfigField("boolean", "RUN_FOR_APPLICATIONS", "true")
+            buildConfigField("boolean", "RUN_FOR_SYSTEM_SERVER", "false")
+        }
+        system_server {
+            dimension "target"
+
+            zygisk {
+                packages(ZygoteLoader.PACKAGE_SYSTEM_SERVER)
+            }
+
+            buildConfigField("boolean", "RUN_FOR_APPLICATIONS", "false")
+            buildConfigField("boolean", "RUN_FOR_SYSTEM_SERVER", "true")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+zygisk {
+    id = "com_v7878_zygisk_sample"
+    name = "ModuleSample"
+    archiveName = "ModuleSample"
+    author = "v7878"
+    description = "Example of the zygisk module"
+    entrypoint = "com.v7878.zygisk.sample.Main"
+}
+
+dependencies {
+    implementation libs.androidvmtools
+    implementation libs.r8.annotations
+}
