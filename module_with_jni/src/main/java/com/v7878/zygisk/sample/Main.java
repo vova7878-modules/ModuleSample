@@ -18,23 +18,23 @@ public class Main {
     @SuppressWarnings("unused")
     @DoNotShrink
     @DoNotObfuscate
-    public static void premain() throws Throwable {
+    public static void premain() {
         EntryPoint.premain();
     }
 
     @SuppressWarnings({"unused", "ConfusingMainMethod"})
     @DoNotShrink
     @DoNotObfuscate
-    public static void main() throws Throwable {
+    public static void main() {
         Log.i(TAG, "Injected into " + ZygoteLoader.getPackageName());
         try {
             EntryPoint.mainCommon();
             if (BuildConfig.RUN_FOR_SYSTEM_SERVER &&
                     PACKAGE_SYSTEM_SERVER.equals(ZygoteLoader.getPackageName())) {
-                MethodAndArgsCallerHook.init();
+                SystemServerInit.init();
             }
             if (BuildConfig.RUN_FOR_APPLICATIONS) {
-                LoadedApkHook.init();
+                ApplicationInit.init();
             }
         } catch (Throwable th) {
             Log.e(TAG, "Exception", th);
