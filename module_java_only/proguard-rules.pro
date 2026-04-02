@@ -20,4 +20,6 @@
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
--dontobfuscate
+
+#-dontobfuscate
+-repackageclasses 'x'
